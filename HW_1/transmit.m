@@ -1,10 +1,8 @@
-function y0 = transmit(mode,s,s2,H,v,sig)
+function y0 = transmit(mode,s,s2,H,v,sig,snr)
     [M, N, L] = size(H);
     x = zeros(N,L);
     y0 = zeros(M,L);
-%     v_beam = zeros(N,N,L);
     switch mode
-%     if mode == 1
         case 1
             p = ones(N,L) / sqrt(N);
             for l=1:L
@@ -24,7 +22,8 @@ function y0 = transmit(mode,s,s2,H,v,sig)
         case 4
             p = zeros(N,2,L);
             for l=1:L
-                power_alloc = waterfill(1, [1/sig(1,1,l), 1/sig(2,2,l)]);
+                dispersion_sq = 1/(10^(snr/10));
+                power_alloc = waterfill(1, [dispersion_sq/(sig(1,1,l)^2), dispersion_sq/(sig(2,2,l)^2)]);
                 p(:,1,l) = v(:,1,l) * sqrt(power_alloc(1));
                 p(:,2,l) = v(:,2,l) * sqrt(power_alloc(2));
                 x(:,l) = p(:,1:2,l) * repmat(s(l), 2, 1);
@@ -38,38 +37,13 @@ function y0 = transmit(mode,s,s2,H,v,sig)
         case 6
             p = zeros(N,2,L);
             for l=1:L
-                power_alloc = waterfill(1, [1/sig(1,1,l), 1/sig(2,2,l)]);
+                dispersion_sq = 1/(20^(snr/10));
+                power_alloc = waterfill(1, [dispersion_sq/(sig(1,1,l)^2), dispersion_sq/(sig(2,2,l)^2)]);
                 p(:,1,l) = v(:,1,l) * sqrt(power_alloc(1));
                 p(:,2,l) = v(:,2,l) * sqrt(power_alloc(2));
                 x(:,l) = p(:,1:2,l) * [s(l);s2(l)];
                 y0(:,l) = H(:,:,l) * x(:,l);
             end
-
-%         case 7       % DFFT beam selection - 8 beams
-%             for l=1:L
-%                 H_beam = dfft_beam_selection(H(:,:,l), 8);
-%                 [~, ~, v_beam(:,:,l)] = svd(H_beam);
-%                 x(:,l) = v_beam(:,1,l) * s(l);
-%                 y0(:,l) = H(:,:,l) * x(:,l);
-%             end
-% 
-%         case 8       % DFFT beam selection - 4 beams
-%             for l=1:L
-%                 H_beam = dfft_beam_selection(H(:,:,l), 4);
-%                 [~, ~, v_beam(:,:,l)] = svd(H_beam);
-%                 x(:,l) = v_beam(:,1,l) * s(l);
-%                 y0(:,l) = H(:,:,l) * x(:,l);
-%             end
-% 
-%         case 9       % DFFT beam selection - 1 beam
-%             for l=1:L
-%                 H_beam = dfft_beam_selection(H(:,:,l), 1);
-%                 [~, ~, v_beam(:,:,l)] = svd(H_beam);
-%                 x(:,l) = v_beam(:,1,l) * s(l);
-%                 y0(:,l) = H(:,:,l) * x(:,l);
-%             end
-
-
 
     end
 

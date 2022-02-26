@@ -45,7 +45,7 @@ v = zeros(N,N,L);
 
 
 
-for mode = [1, 2, 6, 7, 8, 9]
+for mode = 1:9
     for pack = 1:Tn 
         t = StudentID * 2 + pack;
         s = 2*randi([0 1],1,L)-1;
@@ -65,7 +65,7 @@ for mode = [1, 2, 6, 7, 8, 9]
         end
     
         for q=1:length(SNR)
-            y0 = transmit(mode, s, s2, H, v, sig);  % precode and multiply by channel matrix       
+            y0 = transmit(mode, s, s2, H, v, sig, q);  % precode and multiply by channel matrix       
             y = add_noise(y0, SNR(q), M, L);
             s_est = receive(mode, H, u, y);  
             BER(q,pack) = detect(mode, s, s2, s_est, L);
