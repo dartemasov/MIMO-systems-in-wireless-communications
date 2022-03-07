@@ -8,8 +8,8 @@ SNR = -20:2:8;  % dB	range of SNR (default -20...8 for BPSK)
 BER = zeros(max(size(SNR)),Tn);
 L = 256;        % L Number of constellation points and allocated subcarriers
 %               for OFDM L < K - 12*StudentID (default: 256 for BPSK)
-% load -mat link_chan_PATH.mat
-load -mat link_chan_2.mat
+load -mat ../Channels/link_chan_PATH.mat
+% load -mat ../Channels/link_chan_2.mat
 fc = 3.5e9;
 % dimensions:
 % <UE antenna> x <BS antenna> x <subcarrier> x <time>
@@ -45,7 +45,7 @@ v = zeros(N,N,L);
 
 
 
-for mode = 1:9
+for mode = 2
     for pack = 1:Tn 
         t = StudentID * 2 + pack;
         s = 2*randi([0 1],1,L)-1;
@@ -76,26 +76,26 @@ for mode = 1:9
     plot_ber(SNR, BER, mode)
 end
 
-plot_ev_distr(sig);
+% plot_ev_distr(sig);
 
 
 % Plot spatial spectrums
 H_beam = Link_Channel(:,:,StudentID*12+StudentID^2,StudentID^2);
-UE_ant_no = 4;      % select antenna on UE side
-da = 2;
+% UE_ant_no = 4;      % select antenna on UE side
+% da = 2;
+% 
+% for UE_ant_no = 1:4
+%     [rho,phi,theta] = spatial_spectrum(H_beam, fc, da, UE_ant_no);
+%     plot_spatial_spectrum(rho,phi,theta, UE_ant_no);
+% end
 
-for UE_ant_no = 1:4
-    [rho,phi,theta] = spatial_spectrum(H_beam, fc, da, UE_ant_no);
-    plot_spatial_spectrum(rho,phi,theta, UE_ant_no);
-end
-
-% Compare performance
-mse = measure_dfft_approximation_efficiency(H_beam);
-plot(mse);
+% % Compare performance
+[mse, evm, vp, cos_angle_err] = measure_dfft_approximation_efficiency(H_beam);
+% plot(mse);
 
 % 
 % [rho,phi,theta] = spatial_spectrum(H_beam, fc, da, UE_ant_no);
 % plot_spatial_spectrum(rho,phi,theta);
-[H_filtered,~,~] = dfft_beam_selection(H_beam, 1);
-[rho,phi,theta] = spatial_spectrum(H_filtered, fc, da, UE_ant_no);
-plot_spatial_spectrum(rho,phi,theta);
+% [H_filtered,~,~] = dfft_beam_selection(H_beam, 1);
+% [rho,phi,theta] = spatial_spectrum(H_filtered, fc, da, UE_ant_no);
+% plot_spatial_spectrum(rho,phi,theta);
