@@ -1,4 +1,4 @@
-function H_est_resh = estimate_channel(H, UE_SNR, srsSeq, srsSeq_i, srs_sc, MODE)
+function H_est_resh = estimate_channel(H, UE_SNR, srsSeq, srsSeq_i, srs_sc, Wl, Wr, MODE)
 
 [M, N, K, T] = size(H);
 vp = zeros(length(UE_SNR),1);
@@ -27,7 +27,7 @@ for mode = MODE
                         y = srsSeq.* H_ue;
                         yn = add_noise_ul(y, snr);
                         H_est(ant, srs_sc, t) = ChEst_LS_f(yn, srsSeq, srs_sc);
-                        H_est(ant, srs_sc, t) = WinF(H_est(ant, srs_sc, t),135,147);
+                        H_est(ant, srs_sc, t) = WinF(H_est(ant, srs_sc, t),Wl,Wr);
                         H_est(ant, free_sc, t) = interp1(srs_sc, H_est(ant, srs_sc, t), free_sc);       %interpolate missing subcarriers                       
                     case 3      % Interference, no windowing
                         H_ue = conj(squeeze(H(1, ant, srs_sc, t)));
@@ -46,7 +46,7 @@ for mode = MODE
                         yn = add_noise_ul(y, snr);
                         yn = yn + y_i;
                         H_est(ant, srs_sc, t) = ChEst_LS_f(yn, srsSeq, srs_sc);
-                        H_est(ant, srs_sc, t) = WinF(H_est(ant, srs_sc, t),135,147);
+                        H_est(ant, srs_sc, t) = WinF(H_est(ant, srs_sc, t),Wl,Wr);
                         H_est(ant, free_sc, t) = interp1(srs_sc, H_est(ant, srs_sc, t), free_sc);       %interpolate missing subcarriers                       
                 end
             end
