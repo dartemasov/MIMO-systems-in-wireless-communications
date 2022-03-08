@@ -44,37 +44,37 @@ v = zeros(N,N,L);
 % 9 - Precoding vector based on 1 DFT beams
 
 
-
-for mode = 2
-    for pack = 1:Tn 
-        t = StudentID * 2 + pack;
-        s = 2*randi([0 1],1,L)-1;
-        s2 = 2*randi([0 1],1,L)-1;
-    
-        for l=1:L
-            H(:,:,l) = Link_Channel(:,:,(sc0-1+l),t);
-                switch mode
-                    case 7
-                        H(:,:,l) = dfft_beam_selection(H(:,:,l), 8);
-                    case 8
-                        H(:,:,l) = dfft_beam_selection(H(:,:,l), 4);
-                    case 9
-                        H(:,:,l) = dfft_beam_selection(H(:,:,l), 1);
-                end
-            [u(:,:,l), sig(:,:,l), v(:,:,l)] = svd(H(:,:,l));
-        end
-    
-        for q=1:length(SNR)
-            y0 = transmit(mode, s, s2, H, v, sig, q);  % precode and multiply by channel matrix       
-            y = add_noise(y0, SNR(q), M, L);
-            s_est = receive(mode, H, u, y);  
-            BER(q,pack) = detect(mode, s, s2, s_est, L);
-            fprintf('BER = %.2f \t \n',BER(q,pack));  
-        end
-        fprintf('Packet %d\n',pack);
-    end
-    plot_ber(SNR, BER, mode)
-end
+% 
+% for mode = 2
+%     for pack = 1:Tn 
+%         t = StudentID * 2 + pack;
+%         s = 2*randi([0 1],1,L)-1;
+%         s2 = 2*randi([0 1],1,L)-1;
+%     
+%         for l=1:L
+%             H(:,:,l) = Link_Channel(:,:,(sc0-1+l),t);
+%                 switch mode
+%                     case 7
+%                         H(:,:,l) = dfft_beam_selection(H(:,:,l), 8);
+%                     case 8
+%                         H(:,:,l) = dfft_beam_selection(H(:,:,l), 4);
+%                     case 9
+%                         H(:,:,l) = dfft_beam_selection(H(:,:,l), 1);
+%                 end
+%             [u(:,:,l), sig(:,:,l), v(:,:,l)] = svd(H(:,:,l));
+%         end
+%     
+%         for q=1:length(SNR)
+%             y0 = transmit(mode, s, s2, H, v, sig, q);  % precode and multiply by channel matrix       
+%             y = add_noise(y0, SNR(q), M, L);
+%             s_est = receive(mode, H, u, y);  
+%             BER(q,pack) = detect(mode, s, s2, s_est, L);
+%             fprintf('BER = %.2f \t \n',BER(q,pack));  
+%         end
+%         fprintf('Packet %d\n',pack);
+%     end
+%     plot_ber(SNR, BER, mode)
+% end
 
 % plot_ev_distr(sig);
 
@@ -90,7 +90,7 @@ H_beam = Link_Channel(:,:,StudentID*12+StudentID^2,StudentID^2);
 % end
 
 % % Compare performance
-[mse, evm, vp, cos_angle_err] = measure_dfft_approximation_efficiency(H_beam);
+measure_dfft_approximation_efficiency(H_beam);
 % plot(mse);
 
 % 
