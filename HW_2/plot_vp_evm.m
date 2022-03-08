@@ -4,9 +4,6 @@ function H_est = plot_vp_evm(H, UE_SNR, srsSeq, srsSeq_i, srs_sc, Wl, Wr, t)
 vp = zeros(length(UE_SNR),1);
 evm = zeros(length(UE_SNR),1);
 
-
-% y_i = srsSeq_i .* H(2,srs_sc)';  % in F-domain no noise
-
 for mode = 1:4
     c = 0;
     for snr = UE_SNR
@@ -25,6 +22,7 @@ for mode = 1:4
                     yn = add_noise_ul(y, snr);
                     H_est(ant, srs_sc) = ChEst_LS_f(yn, srsSeq, srs_sc);
                     H_est(ant, srs_sc) = WinF(H_est(ant, srs_sc),101,181);
+                    
                 case 3      % Interference, no windowing
                     H_ue = conj(squeeze(H(1, ant, srs_sc, t)));
                     H_ue_i = conj(squeeze(H(2, ant, srs_sc, t)));           % 2nd antenna for interf user
