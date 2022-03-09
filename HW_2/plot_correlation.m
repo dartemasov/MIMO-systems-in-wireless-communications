@@ -13,8 +13,7 @@ title('ACF of ZC sequence of length 288. Time domain');
 xlabel('Time index');
 
 subplot(122);
-autocorr_f = xcorr(srsSeq, srsSeq);
-plot(abs(autocorr_f)/max(autocorr_f));
+plot(abs(fft(autocorr_t)));
 title('ACF of ZC sequence of length 288. Frequency domain');
 xlabel('Subcarrier index');
 
@@ -38,7 +37,7 @@ c_line = 'rgbmkrgb';
 for q = 0:7
     [srsSeq1, srsInfo1, idx1] = srs_gen(q); 
     testcorr = xcorr((srsSeq), srsSeq1); 
-    plot(abs(testcorr),c_line(q+1));
+    plot(abs(fft(testcorr)),c_line(q+1))
     hold on
 end
 hold off
