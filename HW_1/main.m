@@ -8,8 +8,8 @@ SNR = -20:2:8;  % dB	range of SNR (default -20...8 for BPSK)
 BER = zeros(max(size(SNR)),Tn);
 L = 256;        % L Number of constellation points and allocated subcarriers
 %               for OFDM L < K - 12*StudentID (default: 256 for BPSK)
-load -mat ../Channels/link_chan_PATH.mat
-% load -mat ../Channels/link_chan_2.mat
+% load -mat ../Channels/link_chan_PATH.mat
+load -mat ../Channels/link_chan_2.mat
 fc = 3.5e9;
 % dimensions:
 % <UE antenna> x <BS antenna> x <subcarrier> x <time>

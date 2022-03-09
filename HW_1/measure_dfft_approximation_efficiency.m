@@ -22,9 +22,9 @@ function [mse_pos, mse_neg, evm_pos, evm_neg, vp_pos, vp_neg, cos_ang_err_pos, c
 
 % positive polarization
     for beam_num = 1:N/2
-        [H_filtered,~,~] = dfft_beam_selection(H(:,1:32), beam_num);
-        mse_pos(beam_num) = immse(H(:,1:32),H_filtered);
-        [~,~,v] = svd(H(:,1:32));
+        [H_filtered,~,~] = dfft_beam_selection(H(:,33:64), beam_num);
+        mse_pos(beam_num) = immse(H(:,33:64),H_filtered);
+        [~,~,v] = svd(H(:,33:64));
         [~,~,v_f] = svd(H_filtered);
         evm_pos(beam_num) = norm(v(:,1) - v_f(:,1));
         vp_pos(beam_num) = abs(v(:,1)' * v_f(:,1));
@@ -33,9 +33,9 @@ function [mse_pos, mse_neg, evm_pos, evm_neg, vp_pos, vp_neg, cos_ang_err_pos, c
 
 % negative polarization
     for beam_num = 1:N/2
-        [H_filtered,~,~] = dfft_beam_selection(H(:,33:64), beam_num);
-        mse_neg(beam_num) = immse(H(:,33:64),H_filtered);
-        [~,~,v] = svd(H(:,33:64));
+        [H_filtered,~,~] = dfft_beam_selection(H(:,1:32), beam_num);
+        mse_neg(beam_num) = immse(H(:,1:32),H_filtered);
+        [~,~,v] = svd(H(:,1:32));
         [~,~,v_f] = svd(H_filtered);
         evm_neg(beam_num) = norm(v(:,1) - v_f(:,1));
         vp_neg(beam_num) = abs(v(:,1)' * v_f(:,1));
