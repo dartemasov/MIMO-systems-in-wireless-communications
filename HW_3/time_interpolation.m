@@ -6,8 +6,6 @@ function H_est = time_interpolation(inter_mode, H_est, period)
 [M, N, K, T] = size(H_est);
 H_est_orig = H_est;
 
-steps = 1:T;
-
 mask_orig = 1:period:T;
 mask_interp = 1:T;
 for el = mask_orig
