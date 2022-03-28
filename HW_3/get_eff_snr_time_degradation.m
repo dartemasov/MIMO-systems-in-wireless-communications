@@ -1,10 +1,10 @@
-function get_eff_snr_time_degradation(H, H_est, StudentID, L, SNR, SRS_transmission_preiod)
+function get_eff_snr_time_degradation(H, H_est, StudentID, L, SNR, SRS_transmission_preiod, ber)
 
 [M, N, K, T] = size(H_est);
 
 
 
-l = 501;
+l = 501;          
 H_t = zeros(M,N);
 H_est_t = zeros(M,N);
 v_est = zeros(N,N);
@@ -12,13 +12,20 @@ Tn = 32;
 
 
 plot_interpolation(H, l); 
-% H_est = H_est(:,:,l,:); H = H(:,:,l,:); l=1; % Now we will estimate channel only for a single suncarries. Comment this line, to estimate channel for all subcarriers.
+
+if ber == 0
+    H_est = H_est(:,:,l,:); H = H(:,:,l,:); l=1; % Now we will estimate channel only for a single subcarries. Comment this line, to estimate channel for all subcarriers.
+end
 
 plot_interpolation(H_est,l)  % No interpolation
 
 for inter_mode = [1,2,3,4,5,6]
 H_est = time_interpolation(inter_mode, H_est, SRS_transmission_preiod);
-get_ber(inter_mode, H, H_est, StudentID, L, Tn, -10:20)
+
+if ber == 1
+    get_ber(inter_mode, H, H_est, StudentID, L, Tn, -10:20)
+end
+
 
 plot_interpolation(H_est,l)
 
